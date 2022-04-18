@@ -19,3 +19,17 @@ export function loadUser() {
 export function isUserLoggedIn() {
   return () => userService.getUser()
 }
+
+export function transferFunds(contact, amount) {
+  return async (dispatch) => {
+    try {
+      const user = await userService.addMove(
+        contact,
+        amount
+      )
+      dispatch({ type: 'SET_USER', user })
+    } catch (err) {
+      console.log('err', err)
+    }
+  }
+}

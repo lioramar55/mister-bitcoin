@@ -1,0 +1,11 @@
+.move-list {
+  background-color: $clr2;
+  color: $clr5;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  li:not(:last-child) {
+    margin-bottom: 10px;
+  }
+}

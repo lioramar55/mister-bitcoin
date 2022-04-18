@@ -2,6 +2,8 @@ import { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { getContactById } from '../store/actions/contactActions'
 import { connect } from 'react-redux'
+import { MoveList } from '../cmps/MoveList'
+import { TransferFund } from '../cmps/TransferFund'
 class _ContactDetails extends Component {
   state = {
     contact: null,
@@ -19,7 +21,7 @@ class _ContactDetails extends Component {
 
   render() {
     const { contact } = this.state
-    console.log('this.props', this.props)
+    const { user } = this.props
     if (!contact) return <div>Loading...</div>
     return (
       <div className="contact-details">
@@ -31,6 +33,11 @@ class _ContactDetails extends Component {
         <h2>Name: {contact.name}</h2>
         <h2>Phone: {contact.phone}</h2>
         <h2>Email: {contact.email}</h2>
+        <TransferFund
+          contact={contact}
+          userBalance={user.balance}
+        />
+        <MoveList moves={user.moves} toId={contact._id} />
         <div className="btn-section">
           <Link to="/contact" className="simple-button">
             Back
@@ -46,12 +53,14 @@ class _ContactDetails extends Component {
     )
   }
 }
-
+const mapStateToProps = (state) => ({
+  user: state.userModule.user,
+})
 const mapDispatchToProps = {
   getContactById,
 }
 
 export const ContactDetails = connect(
-  undefined,
+  mapStateToProps,
   mapDispatchToProps
 )(_ContactDetails)
