@@ -5,7 +5,9 @@ function _AppHeader(props) {
     <header>
       <div className="main-header container">
         <div className="logo">
-          <h1>MisterBitcoin</h1>
+          <h1>
+            <NavLink to="/">MisterBitcoin</NavLink>
+          </h1>
         </div>
         <nav>
           <NavLink to="/">Home Page</NavLink>

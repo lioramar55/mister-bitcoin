@@ -1,12 +1,17 @@
 import { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { contactService } from '../services/contact.service'
-export class ContactDetails extends Component {
+import { getContactById } from '../store/actions/contactActions'
+import { connect } from 'react-redux'
+class _ContactDetails extends Component {
   state = {
     contact: null,
   }
+
   async componentDidMount() {
-    const contact = await contactService.getContactById(
+    // const contact = await contactService.getContactById(
+    //   this.props.match.params.id
+    // )
+    const contact = await this.props.getContactById(
       this.props.match.params.id
     )
     this.setState({ contact })
@@ -14,6 +19,7 @@ export class ContactDetails extends Component {
 
   render() {
     const { contact } = this.state
+    console.log('this.props', this.props)
     if (!contact) return <div>Loading...</div>
     return (
       <div className="contact-details">
@@ -40,3 +46,12 @@ export class ContactDetails extends Component {
     )
   }
 }
+
+const mapDispatchToProps = {
+  getContactById,
+}
+
+export const ContactDetails = connect(
+  undefined,
+  mapDispatchToProps
+)(_ContactDetails)

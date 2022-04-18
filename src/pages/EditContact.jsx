@@ -1,15 +1,19 @@
 import { Component } from 'react'
 import { contactService } from '../services/contact.service'
+import { connect } from 'react-redux'
+import {
+  getContactById,
+  saveContact,
+} from '../store/actions/contactActions'
 
-export class EditContact extends Component {
+class _EditContact extends Component {
   state = { contact: null }
+
   async componentDidMount() {
     const { id } = this.props.match.params
-    console.log('id', id)
     let contact = null
     if (id) {
       contact = await contactService.getContactById(id)
-      console.log('contact', contact)
     } else {
       contact = contactService.getEmptyContact()
     }
@@ -21,12 +25,14 @@ export class EditContact extends Component {
     const contact = JSON.parse(
       JSON.stringify(this.state.contact)
     )
-    try {
-      await contactService.saveContact(contact)
-      this.props.history.push('/contact')
-    } catch (err) {
-      console.log('err', err)
-    }
+    // try {
+    //   await contactService.saveContact(contact)
+    //   this.props.history.push('/contact')
+    // } catch (err) {
+    //   console.log('err', err)
+    // }
+    await this.props.saveContact(contact)
+    this.props.history.push('/contact/' + contact._id)
   }
 
   handleChange = ({ target }) => {
@@ -89,3 +95,17 @@ export class EditContact extends Component {
     )
   }
 }
+
+const mapStateToProps = ({ selectedContact }) => ({
+  contact: selectedContact,
+})
+
+const mapDispatchToProps = {
+  getContactById,
+  saveContact,
+}
+
+export const EditContact = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(_EditContact)

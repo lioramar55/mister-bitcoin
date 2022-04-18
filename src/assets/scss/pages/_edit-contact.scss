@@ -1,4 +1,7 @@
 .edit-contact {
+  h2 {
+    text-align: center;
+  }
   form {
     display: flex;
     flex-direction: column;
@@ -6,6 +9,7 @@
     align-items: center;
     width: 500px;
     margin: 0 auto;
+    gap: 0.5rem;
     label {
       display: flex;
       flex-direction: column;

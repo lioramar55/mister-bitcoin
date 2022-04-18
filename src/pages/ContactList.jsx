@@ -1,16 +1,25 @@
 import { Component } from 'react'
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { ContactPreview } from '../cmps/ContactPreview'
 import { contactService } from '../services/contact.service'
 import { AppFilter } from '../cmps/AppFilter'
-export class ContactList extends Component {
+import {
+  loadContacts,
+  saveContact,
+  removeContact,
+  setFilterBy,
+} from '../store/actions/contactActions'
+
+class _ContactList extends Component {
   state = {
     contacts: null,
     filterBy: { term: '' },
     selectedContactId: '',
   }
   async componentDidMount() {
-    this.loadContacts()
+    // this.loadContacts()
+    this.props.loadContacts()
   }
 
   loadContacts = async () => {
@@ -22,16 +31,19 @@ export class ContactList extends Component {
   }
 
   setFilter = async (filterBy) => {
-    this.setState({ filterBy }, () => this.loadContacts())
+    // this.setState({ filterBy }, () => this.loadContacts())
+    this.props.setFilterBy(filterBy)
+    this.props.loadContacts()
   }
 
   removeContact = async (id) => {
-    await contactService.deleteContact(id)
-    this.loadContacts()
+    // await contactService.deleteContact(id)
+    // this.loadContacts()
+    this.props.removeContact(id)
   }
 
   render() {
-    const { contacts } = this.state
+    const { contacts } = this.props
     if (!contacts) return <div>Loading...</div>
     return (
       <div className="contact-list">
@@ -63,3 +75,20 @@ export class ContactList extends Component {
     )
   }
 }
+
+const mapStateToProps = (state) => ({
+  contacts: state.contacts,
+  filterBy: state.filterBy,
+})
+
+const mapDispatchToProps = {
+  loadContacts,
+  saveContact,
+  removeContact,
+  setFilterBy,
+}
+
+export const ContactList = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(_ContactList)
