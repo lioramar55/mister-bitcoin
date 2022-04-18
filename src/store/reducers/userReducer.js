@@ -1,13 +1,16 @@
 const INITIAL_STATE = {
-  loggedInUser: null,
+  user: null,
 }
 
 export function userReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case 'SET_USER':
-      break
+      return {
+        ...state,
+        user: action.user,
+      }
 
     default:
-      break
+      return state
   }
 }

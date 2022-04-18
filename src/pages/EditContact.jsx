@@ -96,16 +96,12 @@ class _EditContact extends Component {
   }
 }
 
-const mapStateToProps = ({ selectedContact }) => ({
-  contact: selectedContact,
-})
-
 const mapDispatchToProps = {
   getContactById,
   saveContact,
 }
 
 export const EditContact = connect(
-  mapStateToProps,
+  undefined,
   mapDispatchToProps
 )(_EditContact)

@@ -77,8 +77,8 @@ class _ContactList extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  contacts: state.contacts,
-  filterBy: state.filterBy,
+  contacts: state.contactModule.contacts,
+  filterBy: state.contactModule.filterBy,
 })
 
 const mapDispatchToProps = {

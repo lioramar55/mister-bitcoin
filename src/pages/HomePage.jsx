@@ -5,12 +5,16 @@ export class HomePage extends Component {
     totalBTC: 0,
   }
   async componentDidMount() {
-    const totalBTC = await getRate(this.props.user.balance)
-    this.setState({ totalBTC })
+    const { user } = this.props
+    if (user) {
+      const totalBTC = await getRate(user.balance)
+      this.setState({ totalBTC })
+    }
   }
   render() {
     const { user } = this.props
     const { totalBTC } = this.state
+    if (!user) return <div>Loading...</div>
     return (
       <section className="home-page">
         <h1>Welcome back, {user.name}</h1>
