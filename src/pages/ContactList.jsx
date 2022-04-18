@@ -1,27 +1,33 @@
 import { Component } from 'react'
+import { Link } from 'react-router-dom'
 import { ContactPreview } from '../cmps/ContactPreview'
 import { contactService } from '../services/contact.service'
-
+import { AppFilter } from '../cmps/AppFilter'
 export class ContactList extends Component {
   state = {
     contacts: null,
-    setFilter: { term: '' },
+    filterBy: { term: '' },
     selectedContactId: '',
   }
   async componentDidMount() {
-    const contacts = await contactService.getContacts()
-    // const BTCData = await getMarketPrice()
-    // this.setState({ contacts, BTCData })
-    this.setState({ contacts })
+    this.loadContacts()
   }
 
-  setFilter = async (ev) => {
-    console.log('ev.target.name', ev.target.name)
-    const filterBy = { term: ev.target.name }
+  loadContacts = async () => {
+    const { filterBy } = this.state
     const contacts = await contactService.getContacts(
       filterBy
     )
     this.setState({ contacts })
+  }
+
+  setFilter = async (filterBy) => {
+    this.setState({ filterBy }, () => this.loadContacts())
+  }
+
+  removeContact = async (id) => {
+    await contactService.deleteContact(id)
+    this.loadContacts()
   }
 
   render() {
@@ -29,21 +35,27 @@ export class ContactList extends Component {
     if (!contacts) return <div>Loading...</div>
     return (
       <div className="contact-list">
-        <h1>Contact List</h1>
-        <input
-          type="text"
-          onChange={this.setFilter}
-          placeholder="Search"
-        />
-        <ul className="contacts">
+        <div className="header">
+          <h1>Contact List</h1>
+          <AppFilter setFilter={this.setFilter} />
+          <Link
+            className="simple-button"
+            to="/contact/edit"
+          >
+            Add Contact
+          </Link>
+        </div>
+        <ul className="contacts simple-cards-grid">
           {contacts.map((c) => (
-            <li
-              key={c._id}
-              onClick={() =>
-                this.setState({ selectedContactId: c._id })
-              }
-            >
-              <ContactPreview contact={c} />
+            <li key={c._id}>
+              <Link to={`/contact/${c._id}`}>
+                <ContactPreview contact={c} />
+              </Link>
+              <button
+                onClick={() => this.removeContact(c._id)}
+              >
+                X
+              </button>
             </li>
           ))}
         </ul>

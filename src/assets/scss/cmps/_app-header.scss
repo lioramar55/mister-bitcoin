@@ -1,13 +1,19 @@
 header {
-  padding: 0 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  nav {
-    display: flex;
-    gap: 1rem;
-    span {
+  background-color: $clr1;
+  .main-header {
+    color: $clr5;
+    .logo {
       cursor: pointer;
+    }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    nav {
+      display: flex;
+      gap: 1rem;
+      span {
+        cursor: pointer;
+      }
     }
   }
 }

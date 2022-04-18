@@ -13,9 +13,9 @@ export class HomePage extends Component {
     const { totalBTC } = this.state
     return (
       <section className="home-page">
-        <h1>Hello {user.name}</h1>
-        <h3>Balance: ${user.balance}</h3>
-        <h3>BTC: {totalBTC}</h3>
+        <h1>Welcome back, {user.name}</h1>
+        <h3>Your balance: ${user.balance}</h3>
+        <h3>Total in BTC: {totalBTC}</h3>
       </section>
     )
   }

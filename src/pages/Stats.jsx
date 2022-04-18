@@ -1,6 +1,6 @@
 import { createChart } from 'lightweight-charts'
 import React, { useEffect, useRef, Component } from 'react'
-
+import { getMarketPrice } from '../services/bitcoin.service'
 export const ChartComponent = (props) => {
   const chartContainerRef = useRef()
 
@@ -28,7 +28,7 @@ export const ChartComponent = (props) => {
 
       chart.remove()
     }
-  }, [props.data])
+  })
 
   return <div ref={chartContainerRef} />
 }
@@ -37,16 +37,13 @@ export class Stats extends Component {
     chartData: null,
   }
   async componentDidMount() {
-    let time = null
-    const chartData = this.props.data.map((t) => {
-      time = new Date(t.x * 1000).toLocaleDateString(
+    const data = await getMarketPrice()
+    const chartData = data.map((t) => ({
+      time: new Date(t.x * 1000).toLocaleDateString(
         'en-CA'
-      )
-      return {
-        time,
-        value: t.y,
-      }
-    })
+      ),
+      value: t.y,
+    }))
     this.setState({ chartData })
   }
   render() {
@@ -54,6 +51,7 @@ export class Stats extends Component {
     if (chartData)
       return (
         <div>
+          <h1>BTC Market Data</h1>
           <ChartComponent data={chartData}></ChartComponent>
         </div>
       )

@@ -3,8 +3,8 @@ import { AppHeader } from '../cmps/AppHeader'
 import { HomePage } from './HomePage'
 import { ContactList } from './ContactList'
 import { ContactDetails } from './ContactDetails'
+import { EditContact } from './EditContact'
 import { Stats } from './Stats'
-import { getMarketPrice } from '../services/bitcoin.service'
 import {
   HashRouter as Router,
   Route,
@@ -17,7 +17,6 @@ export class BitcoinApp extends Component {
     selectedContactId: '',
     contacts: [],
     user: getUser(),
-    BTCData: null,
   }
 
   selectContact = (selectedContactId) => {
@@ -28,14 +27,27 @@ export class BitcoinApp extends Component {
     const { user } = this.state
     return (
       <Router>
-        <div className="app">
-          <AppHeader />
+        <AppHeader />
+        <div className="container">
           <main>
             <Switch>
+              <Route
+                path="/contact/edit/:id"
+                component={EditContact}
+              />
+              <Route
+                path="/contact/edit"
+                component={EditContact}
+              />
+              <Route
+                path="/contact/:id"
+                component={ContactDetails}
+              />
               <Route
                 path="/contact"
                 component={ContactList}
               />
+              <Route path="/stats" component={Stats} />
               <Route
                 path="/"
                 component={() => <HomePage user={user} />}
