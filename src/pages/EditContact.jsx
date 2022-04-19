@@ -1,107 +1,92 @@
-import { Component } from 'react'
+import { useEffect } from 'react'
 import { contactService } from '../services/contact.service'
-import { connect } from 'react-redux'
-import {
-  getContactById,
-  saveContact,
-} from '../store/actions/contactActions'
+import { saveContact } from '../store/actions/contactActions'
+import { useParams } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { useForm } from '../hooks/useForm'
 
-class _EditContact extends Component {
-  state = { contact: null }
+export const EditContact = (props) => {
+  // const [contact, setContact] = useState(null)
+  const params = useParams()
+  const dispatch = useDispatch()
 
-  async componentDidMount() {
-    const { id } = this.props.match.params
+  const [contact, setContact, handleChange] = useForm(null)
+  useEffect(() => {
+    const { id } = params
     let contact = null
     if (id) {
-      contact = await contactService.getContactById(id)
+      setCurrContact(id)
     } else {
       contact = contactService.getEmptyContact()
     }
-    this.setState({ contact })
-  }
+    setContact(contact)
+    // eslint-disable-next-line
+  }, [contact])
 
-  handleSubmit = async (ev) => {
+  const setCurrContact = async (id) => {
+    const contactToSave =
+      await contactService.getContactById(id)
+    setContact(contactToSave)
+  }
+  const handleSubmit = async (ev) => {
     ev.preventDefault()
-    const contact = JSON.parse(
-      JSON.stringify(this.state.contact)
-    )
-    // try {
-    //   await contactService.saveContact(contact)
-    //   this.props.history.push('/contact')
-    // } catch (err) {
-    //   console.log('err', err)
-    // }
-    await this.props.saveContact(contact)
-    this.props.history.push('/contact/' + contact._id)
+    await dispatch(saveContact(contact))
+    props.history.push('/contact/' + contact._id)
   }
 
-  handleChange = ({ target }) => {
-    const field = target.name
-    const value =
-      target.type === 'number'
-        ? +target.value || ''
-        : target.value
-    this.setState(({ contact }) => ({
-      contact: { ...contact, [field]: value },
-    }))
-  }
-
-  inputRef = (elInput) => {
+  const inputRef = (elInput) => {
     if (elInput) elInput.focus()
   }
 
-  render() {
-    const { id } = this.props.match.params
-    const { contact } = this.state
-    if (!contact) return <div>Loading...</div>
-    return (
-      <div className="edit-contact">
-        <h2>{id ? 'Edit' : 'Add'} Contact</h2>
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Name:
-            <input
-              ref={this.inputRef}
-              onChange={this.handleChange}
-              value={contact.name}
-              type="text"
-              name="name"
-              required
-            />
-          </label>
-          <label>
-            Email:
-            <input
-              type="email"
-              onChange={this.handleChange}
-              value={contact.email}
-              name="email"
-              required
-            />
-          </label>
-          <label>
-            Phone:
-            <input
-              type="tel"
-              value={contact.phone}
-              onChange={this.handleChange}
-              name="phone"
-              required
-            />
-          </label>
-          <button>Save</button>
-        </form>
-      </div>
-    )
-  }
+  const { id } = params
+  if (!contact) return <div>Loading...</div>
+  return (
+    <div className="edit-contact">
+      <h2>{id ? 'Edit' : 'Add'} Contact</h2>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Name:
+          <input
+            ref={inputRef}
+            onChange={handleChange}
+            value={contact.name}
+            type="text"
+            name="name"
+            required
+          />
+        </label>
+        <label>
+          Email:
+          <input
+            type="email"
+            onChange={handleChange}
+            value={contact.email}
+            name="email"
+            required
+          />
+        </label>
+        <label>
+          Phone:
+          <input
+            type="tel"
+            value={contact.phone}
+            onChange={handleChange}
+            name="phone"
+            required
+          />
+        </label>
+        <button>Save</button>
+      </form>
+    </div>
+  )
 }
 
-const mapDispatchToProps = {
-  getContactById,
-  saveContact,
-}
+// const mapDispatchToProps = {
+//   getContactById,
+//   saveContact,
+// }
 
-export const EditContact = connect(
-  undefined,
-  mapDispatchToProps
-)(_EditContact)
+// export const EditContact = connect(
+//   undefined,
+//   mapDispatchToProps
+// )(_EditContact)

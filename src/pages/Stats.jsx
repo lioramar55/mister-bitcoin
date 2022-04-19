@@ -1,6 +1,7 @@
 import { createChart } from 'lightweight-charts'
-import React, { useEffect, useRef, Component } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { getMarketPrice } from '../services/bitcoin.service'
+
 export const ChartComponent = (props) => {
   const chartContainerRef = useRef()
 
@@ -32,29 +33,34 @@ export const ChartComponent = (props) => {
 
   return <div ref={chartContainerRef} />
 }
-export class Stats extends Component {
-  state = {
-    chartData: null,
-  }
-  async componentDidMount() {
+export const Stats = () => {
+  const [chartData, setChartData] = useState(null)
+  const [data, setData] = useState(null)
+
+  useEffect(() => {
+    getData()
+    if (data) {
+      const mappedData = data.map((t) => ({
+        time: new Date(t.x * 1000).toLocaleDateString(
+          'en-CA'
+        ),
+        value: t.y,
+      }))
+      setChartData(mappedData)
+    }
+  }, [data])
+
+  const getData = async () => {
     const data = await getMarketPrice()
-    const chartData = data.map((t) => ({
-      time: new Date(t.x * 1000).toLocaleDateString(
-        'en-CA'
-      ),
-      value: t.y,
-    }))
-    this.setState({ chartData })
+    setData(data)
   }
-  render() {
-    const { chartData } = this.state
-    if (chartData)
-      return (
-        <div>
-          <h1>BTC Market Data</h1>
-          <ChartComponent data={chartData}></ChartComponent>
-        </div>
-      )
-    else return <div>Loading...</div>
-  }
+
+  if (chartData)
+    return (
+      <div>
+        <h1>BTC Market Data</h1>
+        <ChartComponent data={chartData}></ChartComponent>
+      </div>
+    )
+  else return <div>Loading...</div>
 }
