@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { ContactPreview } from '../cmps/ContactPreview'
@@ -9,7 +9,7 @@ import {
   setFilterBy,
 } from '../store/actions/contactActions'
 
-export const ContactList = (props) => {
+export const ContactList = () => {
   const { contacts } = useSelector(
     (state) => state.contactModule
   )
@@ -17,12 +17,13 @@ export const ContactList = (props) => {
   useEffect(() => {
     dispatch(loadContacts())
     // eslint-disable-next-line
-  }, [contacts])
+  }, [])
 
-  const onSetFilter = async (filterBy) => {
-    dispatch(setFilterBy(filterBy))
+  const onSetFilter = useCallback(async (filterBy) => {
+    await dispatch(setFilterBy(filterBy))
     dispatch(loadContacts())
-  }
+    // eslint-disable-next-line
+  }, [])
 
   const onRemoveContact = async (id) => {
     dispatch(removeContact(id))

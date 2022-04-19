@@ -10,7 +10,7 @@ export const EditContact = (props) => {
   const params = useParams()
   const dispatch = useDispatch()
 
-  const [contact, setContact, handleChange] = useForm(null)
+  const [contact, handleChange, setContact] = useForm(null)
   useEffect(() => {
     const { id } = params
     let contact = null
@@ -21,7 +21,7 @@ export const EditContact = (props) => {
     }
     setContact(contact)
     // eslint-disable-next-line
-  }, [contact])
+  }, [])
 
   const setCurrContact = async (id) => {
     const contactToSave =
@@ -30,6 +30,7 @@ export const EditContact = (props) => {
   }
   const handleSubmit = async (ev) => {
     ev.preventDefault()
+    console.log('contact', contact)
     await dispatch(saveContact(contact))
     props.history.push('/contact/' + contact._id)
   }

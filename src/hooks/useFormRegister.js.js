@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import { useEffectUpdate } from './useEffectUpdate'
 
-export const useForm = (initialState, cb = () => {}) => {
+export const useFormRegister = (
+  initialState,
+  cb = () => {}
+) => {
   const [fields, setFields] = useState(initialState)
 
   useEffectUpdate(() => {
@@ -20,5 +23,14 @@ export const useForm = (initialState, cb = () => {}) => {
     }))
   }
 
-  return [fields, handleChange, setFields]
+  const register = (field) => {
+    return {
+      id: field,
+      name: field,
+      onChange: handleChange,
+      value: fields[field],
+    }
+  }
+
+  return [register, setFields]
 }

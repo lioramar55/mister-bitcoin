@@ -15,19 +15,23 @@ export const MoveList = (props) => {
     return new Date(time).toUTCString()
   }
 
+  const mappedMoves = () => {
+    return moves.map((move) => (
+      <li key={move.toId + move.at}>
+        {!toId && <p>To: {move.to}</p>}
+        <p>{'At: ' + formatTime(move.at)}</p>
+        <p>Amount: {move.amount} coins</p>
+      </li>
+    ))
+  }
+
   const { toId } = props
   if (!moves) return <div>Loading...</div>
   return (
     <div className="move-list">
       <h3>{toId ? 'All moves' : 'Last 3 moves'}</h3>
       <ul className="clean-list">
-        {moves.map((move) => (
-          <li key={move.toId + move.at}>
-            {!toId && <p>To: {move.to}</p>}
-            <p>{'At: ' + formatTime(move.at)}</p>
-            <p>Amount: {move.amount} coins</p>
-          </li>
-        ))}
+        {moves.length ? mappedMoves() : <li>No moves</li>}
       </ul>
     </div>
   )

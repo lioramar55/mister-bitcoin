@@ -23,3 +23,20 @@
 @import 'cmps/contact-preview';
 @import 'cmps/app-header';
 @import 'cmps/move-list';
+
+.app {
+  // display: flex;
+  // flex-direction: column;
+  min-height: 100vh;
+  .container {
+    flex-grow: 1;
+  }
+  // justify-content: space-between;
+  footer {
+    margin-top: auto;
+    text-align: center;
+    padding: 1rem;
+    background-color: $clr1;
+    color: $clr5;
+  }
+}

@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom'
 import { AppHeader } from '../cmps/AppHeader'
 import { HomePage } from './HomePage'
 import { ContactList } from './ContactList'
+import { AppFooter } from '../cmps/AppFooter'
 import { ContactDetails } from './ContactDetails'
 import { EditContact } from './EditContact'
 import { Stats } from './Stats'
@@ -34,39 +35,45 @@ export const BitcoinApp = () => {
   }
 
   return (
-    <Router>
-      <AppHeader />
-      <div className="container">
-        <main>
-          <Switch>
-            <PrivateRoute
-              path="/contact/edit/:id"
-              component={EditContact}
-            />
-            <PrivateRoute
-              path="/contact/edit"
-              component={EditContact}
-            />
-            <PrivateRoute
-              path="/contact/:id"
-              component={() => (
-                <ContactDetails user={user} />
-              )}
-            />
-            <PrivateRoute
-              path="/contact"
-              component={ContactList}
-            />
-            <Route path="/stats" component={Stats} />
-            <Route path="/signup" component={SignupPage} />
-            <PrivateRoute
-              path="/"
-              component={() => <HomePage user={user} />}
-            />
-          </Switch>
-        </main>
-      </div>
-    </Router>
+    <section className="app">
+      <Router>
+        <AppHeader />
+        <div className="container">
+          <main>
+            <Switch>
+              <PrivateRoute
+                path="/contact/edit/:id"
+                component={EditContact}
+              />
+              <PrivateRoute
+                path="/contact/edit"
+                component={EditContact}
+              />
+              <PrivateRoute
+                path="/contact/:id"
+                component={() => (
+                  <ContactDetails user={user} />
+                )}
+              />
+              <PrivateRoute
+                path="/contact"
+                component={ContactList}
+              />
+              <Route path="/stats" component={Stats} />
+              <Route
+                path="/signup"
+                component={SignupPage}
+              />
+              <PrivateRoute
+                path="/"
+                component={() => <HomePage user={user} />}
+              />
+            </Switch>
+          </main>
+        </div>
+        <AppFooter />
+      </Router>
+    </section>
   )
 }
 
